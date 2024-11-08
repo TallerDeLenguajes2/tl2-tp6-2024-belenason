@@ -1,0 +1,50 @@
+@model List<Producto>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<main class="container my-4">
+    <header>
+        <h2 class="text-center">Lista de Productos</h2>
+    </header>
+
+    <section aria-labelledby="productos-lista">
+        <table class="table table-bordered table-hover">
+            <caption id="productos-lista">Lista de productos disponibles</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in Model)
+                {
+                    <tr>
+                        <td>@producto.Descripcion</td>
+                        <td>@producto.Precio.ToString("C")</td>
+                        <td>
+                            <a asp-controller="Producto" asp-action="ModificarProducto" asp-route-IdProducto="@producto.IdProducto" class="btn btn-warning btn-sm">Editar</a>
+                            <a asp-controller="Producto" asp-action="EliminarProducto" asp-route-IdProducto="@producto.IdProducto" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+
+    <footer class="text-center mt-4">
+        <a asp-controller="Producto" asp-action="AltaProducto" class="btn btn-success">Alta producto</a>
+    </footer>
+</main>
+
+</body>
+</html>

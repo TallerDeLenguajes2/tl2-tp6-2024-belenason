@@ -1,0 +1,50 @@
+@model List<Presupuesto>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<main class="container my-4">
+    <header>
+        <h2 class="text-center">Lista de Presupuestos</h2>
+    </header>
+
+    <section aria-labelledby="presupuesto-lista">
+        <table class="table table-bordered table-hover">
+            <caption id="presupuesto-lista">Lista de presupuestos disponibles</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Destinatario</th>
+                    <th scope="col">Fecha de creacion</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var presupuesto in Model)
+                {
+                    <tr>
+                        <td>@presupuesto.NombreDestinatario</td>
+                        <td>@presupuesto.FechaCreacion</td>
+                        <td>
+                            <a asp-controller="Presupuesto" asp-action="ModificarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-warning btn-sm">Editar</a>
+                            <a asp-controller="Presupuesto" asp-action="EliminarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+
+    <footer class="text-center mt-4">
+        <a asp-controller="Presupuesto" asp-action="AltaPresupuesto" class="btn btn-success">Alta presupuesto</a>
+    </footer>
+</main>
+
+</body>
+</html>
