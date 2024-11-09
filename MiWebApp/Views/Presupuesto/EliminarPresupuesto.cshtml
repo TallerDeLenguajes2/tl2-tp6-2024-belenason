@@ -1,0 +1,17 @@
+@model Presupuesto
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2 class="text-center">Presupuesto</h2>
+        <p class="text-center"><strong>Nombre del destinatario:</strong> @Model.NombreDestinatario</p>
+        <p class="text-center"><strong>Fecha de creacion:</strong> @Model.FechaCreacion.ToString("dd/MM/yyyy")</p>
+    </div>
+    <p class="text-center">¿Desea eliminar este Presupuesto?</p>
+    <div class="text-center">
+        <form asp-controller="Presupuesto" asp-action="EliminarPresupuestoId" method="post">
+            <input type="hidden" name="IdPresupuesto" value="@Model.IdPresupuesto" />
+            <button type="submit" class="btn btn-success">Eliminar</button>
+            <a asp-controller="Presupuesto" asp-action="Index" class="btn btn-danger">Cancelar</a>
+        </form>
+    </div>
+</div>

@@ -30,10 +30,14 @@
                 {
                     <tr>
                         <td>@presupuesto.NombreDestinatario</td>
-                        <td>@presupuesto.FechaCreacion</td>
+                        <td>@presupuesto.FechaCreacion.ToShortDateString()</td>
                         <td>
                             <a asp-controller="Presupuesto" asp-action="ModificarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-warning btn-sm">Editar</a>
                             <a asp-controller="Presupuesto" asp-action="EliminarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a asp-controller="Presupuesto" asp-action="AgregarProductoAPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-primary btn-sm">Agregar Producto</a>
+                            <a asp-controller="Presupuesto" asp-action="EliminarProductoDePresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-secondary btn-sm">Eliminar Producto</a>
+                            <a asp-controller="Presupuesto" asp-action="DetallesPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-dark btn-sm">Detalles</a>
+
                         </td>
                     </tr>
                 }

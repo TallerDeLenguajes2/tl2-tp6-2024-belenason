@@ -1,0 +1,20 @@
+@model Presupuesto
+
+<h2>Modificar Presupuesto</h2>
+
+<form asp-controller="Presupuesto" asp-action="ModificarPresupuesto" method="post">
+    <input type="hidden" asp-for="IdPresupuesto" />
+    <div class="form-group">
+        <label asp-for="NombreDestinatario">Nombre del destinatario</label>
+        <input asp-for="NombreDestinatario" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="FechaCreacion" class="form-label">Fecha de Creación</label>
+        <input asp-for="FechaCreacion" type="date" class="form-control" />
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+
+</form>

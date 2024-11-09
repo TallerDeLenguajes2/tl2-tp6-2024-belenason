@@ -19,7 +19,37 @@ class PresupuestoRepository
         }
     }
 
-    public List<Presupuesto> ListarPresupuestos()
+ public List<Presupuesto> ObtenerPresupuestos()
+    {
+        List<Presupuesto> presupuestos = new List<Presupuesto>();
+        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
+
+        string query = @"SELECT 
+            idPresupuesto,
+            NombreDestinatario,
+            FechaCreacion
+        FROM 
+            Presupuestos;";
+
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
+
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Presupuesto presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), reader["NombreDestinatario"].ToString(), Convert.ToDateTime(reader["FechaCreacion"]));
+                    presupuestos.Add(presupuesto);
+                }
+            }
+            connection.Close();
+        }
+        return presupuestos;
+    }
+
+    public List<Presupuesto> ListarPresupuestos() //No lo uso
     {
         List<Presupuesto> presupuestos = new List<Presupuesto>();
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
@@ -94,9 +124,9 @@ class PresupuestoRepository
             PD.Cantidad
         FROM 
             Presupuestos P
-        JOIN 
+        LEFT JOIN 
             PresupuestosDetalle PD ON P.idPresupuesto = PD.idPresupuesto
-        JOIN 
+        LEFT JOIN 
             Productos PR ON PD.idProducto = PR.idProducto
         WHERE 
             P.idPresupuesto = @id;";
@@ -115,9 +145,12 @@ class PresupuestoRepository
                     {
                         presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), reader["NombreDestinatario"].ToString(), Convert.ToDateTime(reader["FechaCreacion"]));
                     }
-                    Producto producto = new Producto(Convert.ToInt32(reader["idProducto"]), reader["Producto"].ToString(), Convert.ToInt32(reader["Precio"]));
-                    PresupuestosDetalle detalle = new PresupuestosDetalle(producto,Convert.ToInt32(reader["Cantidad"]));
-                    presupuesto.Detalle.Add(detalle);
+                    if(!reader.IsDBNull(reader.GetOrdinal("idProducto")))
+                    {
+                        Producto producto = new Producto(Convert.ToInt32(reader["idProducto"]), reader["Producto"].ToString(), Convert.ToInt32(reader["Precio"]));
+                        PresupuestosDetalle detalle = new PresupuestosDetalle(producto,Convert.ToInt32(reader["Cantidad"]));
+                        presupuesto.Detalle.Add(detalle);
+                    }
                     cont++;
                 }
             }
@@ -145,6 +178,26 @@ class PresupuestoRepository
         }
     }
 
+    public void ModificarPresupuesto(Presupuesto presupuesto)
+    {
+        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
+
+        string query = @"UPDATE Presupuestos SET NombreDestinatario = @destinatario, FechaCreacion = @fecha WHERE idPresupuesto = @Id";
+
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query,connection);
+            command.Parameters.AddWithValue("@destinatario", presupuesto.NombreDestinatario);
+            command.Parameters.AddWithValue("@fecha", presupuesto.FechaCreacion);
+            command.Parameters.AddWithValue("@Id", presupuesto.IdPresupuesto);
+            command.ExecuteNonQuery();
+            connection.Close();            
+        }
+
+
+    }
+
     public void EliminarpresupuestoPorId(int idPresupuesto)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
@@ -167,6 +220,57 @@ class PresupuestoRepository
             
         }
     }
+
+    public void EliminarProducto(int idPresupuesto, int idProducto)
+    {
+        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
+
+        string query = @"DELETE FROM PresupuestosDetalle WHERE idPresupuesto = @idP AND idProducto = @idPR";
+
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
+            command.Parameters.AddWithValue("@idP", idPresupuesto);
+            command.Parameters.AddWithValue("@idPR", idProducto);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+
+    public List<Producto> ListarProductosAsociadosAPresupuesto(int IdPresupuesto)
+    {
+        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
+        List<Producto> productos = new List<Producto>();
+
+        string query = @"SELECT p.IdProducto, p.Descripcion 
+                        FROM Productos p
+                        INNER JOIN PresupuestosDetalle pd ON p.IdProducto = pd.IdProducto
+                        WHERE pd.IdPresupuesto = @IdPresupuesto";
+
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
+            command.Parameters.AddWithValue("@IdPresupuesto", IdPresupuesto);
+
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Producto producto = new Producto
+                    {
+                        IdProducto = reader.GetInt32(0),
+                        Descripcion = reader.GetString(1)
+                    };
+                    productos.Add(producto);
+                }
+            }
+            connection.Close();
+        }
+        return productos;
+    }
+
 
 }
 
