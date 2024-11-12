@@ -1,38 +1,40 @@
 using Microsoft.Data.Sqlite;
-class ProductoRepository
+class ClienteRepository
 {
-    public void CrearProducto(Producto producto)
+    public void CrearCliente(Cliente cliente)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = $"INSERT INTO Productos (Descripcion, Precio) VALUES (@Descripcion, @Precio)";
+        string query = $"INSERT INTO Clientes (Nombre, Email, Telefono) VALUES (@nombre, @email, @tel)";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
-            command.Parameters.AddWithValue("@Precio", producto.Precio);
+            command.Parameters.AddWithValue("@nombre", cliente.Nombre);
+            command.Parameters.AddWithValue("@email", cliente.Email);
+            command.Parameters.AddWithValue("@tel", cliente.Telefono);
             command.ExecuteNonQuery();
             connection.Close();
             
         }
     }
 
-    public void ModificarProducto(Producto producto)
+    public void ModificarCliente(Cliente cliente)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = $"UPDATE Productos SET Descripcion = @Descripcion, Precio = @Precio WHERE idProducto = @idProducto";
+        string query = $"UPDATE Clientes SET Nombre = @nombre, Email = @mail, Telefono = @tel WHERE IdCliente = @idCliente";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
 
-            command.Parameters.AddWithValue("@idProducto", producto.IdProducto);
-            command.Parameters.AddWithValue("@Precio", producto.Precio);
-            command.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
+            command.Parameters.AddWithValue("@nombre", cliente.Nombre);
+            command.Parameters.AddWithValue("@mail", cliente.Email);
+            command.Parameters.AddWithValue("@tel", cliente.Telefono);
+            command.Parameters.AddWithValue("@idCliente", cliente.ClienteId);
 
             command.ExecuteNonQuery();
             connection.Close();
@@ -40,14 +42,14 @@ class ProductoRepository
         }
     }
 
-    public List<Producto> ListarProductos()
+    public List<Cliente> ListarClientes()
     {
 
-        List<Producto> productos = new List<Producto>();
+        List<Cliente> clientes = new List<Cliente>();
 
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = $"SELECT * FROM Productos";
+        string query = $"SELECT * FROM Clientes";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
@@ -59,61 +61,61 @@ class ProductoRepository
             {
                 while (reader.Read())
                 {
-                    Producto producto = new Producto(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2));
-                    productos.Add(producto);
+                    Cliente cliente = new Cliente(Convert.ToInt32(reader["IdCliente"]), reader["Nombre"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
+                    clientes.Add(cliente);
                 }   
             }
             
             connection.Close();
             
         }
-        return productos;
+        return clientes;
     }
 
-    public Producto ObtenerProductoPorId(int idProd)
+    public Cliente ObtenerClientePorId(int idCliente)
     {
 
-        Producto producto;
+        Cliente cliente;
 
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = $"SELECT * FROM Productos WHERE idProducto = @idProducto";
+        string query = $"SELECT * FROM Clientes WHERE IdCliente = @idCliente";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
 
             SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@idProducto", idProd);
+            command.Parameters.AddWithValue("@idCliente", idCliente);
 
             using(SqliteDataReader reader = command.ExecuteReader())
             {
                 if (reader.Read())
                 {
-                    producto = new Producto(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2));
+                    cliente = new Cliente(Convert.ToInt32(reader["IdCliente"]), reader["Nombre"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
                 } else
                 {
-                    producto = null;
+                    cliente = null;
                 }
             }
             
             connection.Close();
             
         }
-        return producto;
+        return cliente;
     }
 
-    public void EliminarProductoPorId(int idProducto)
+    public void EliminarClientePorId(int idCliente)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = $"DELETE FROM productos WHERE idProducto = @idProducto";
+        string query = $"DELETE FROM Clientes WHERE IdCliente = @idCliente";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@idProducto", idProducto);
+            command.Parameters.AddWithValue("@IdCliente", idCliente);
             command.ExecuteNonQuery();
             connection.Close();
             

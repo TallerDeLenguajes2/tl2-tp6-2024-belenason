@@ -1,18 +1,18 @@
 using Microsoft.Data.Sqlite;
 class PresupuestoRepository
 {
-    public void CrearPresupuesto(Presupuesto presupuesto)
+    public void CrearPresupuesto(Presupuesto presupuesto) //NO EJECUTAR SIN REVISAR
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = $"INSERT INTO Presupuestos (NombreDestinatario, FechaCreacion) VALUES (@Destinatario, @FechaCreacion)";
+        string query = $"INSERT INTO Presupuestos (FechaCreacion, ClienteId) VALUES (@FechaCreacion, @ClienteId)";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@Destinatario", presupuesto.NombreDestinatario);
             command.Parameters.AddWithValue("@FechaCreacion", presupuesto.FechaCreacion);
+            command.Parameters.AddWithValue("@ClienteId", presupuesto.Cliente.ClienteId);
             command.ExecuteNonQuery();
             connection.Close();
             
@@ -26,10 +26,17 @@ class PresupuestoRepository
 
         string query = @"SELECT 
             idPresupuesto,
-            NombreDestinatario,
-            FechaCreacion
+            FechaCreacion,
+            P.ClienteId, 
+            COLEASCE(C.Nombre, 'No se asigno cliente') AS Cliente,
+            C.Email,
+            C.Telefono
         FROM 
-            Presupuestos;";
+            Presupuestos P
+        LEFT JOIN 
+            Clientes C ON P.IdCliente = C.ClienteId;";
+
+        Cliente cliente = null; //Está bien que sea nulo si no hay ningún cliente?
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
@@ -40,7 +47,11 @@ class PresupuestoRepository
             {
                 while (reader.Read())
                 {
-                    Presupuesto presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), reader["NombreDestinatario"].ToString(), Convert.ToDateTime(reader["FechaCreacion"]));
+                    if(!reader.IsDBNull(reader.GetOrdinal("IdCliente")))
+                    {
+                        cliente = new Cliente(Convert.ToInt32(reader["IdCliente"]), reader["Cliente"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
+                    }
+                    Presupuesto presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), cliente, Convert.ToDateTime(reader["FechaCreacion"]));
                     presupuestos.Add(presupuesto);
                 }
             }
@@ -49,7 +60,7 @@ class PresupuestoRepository
         return presupuestos;
     }
 
-    public List<Presupuesto> ListarPresupuestos() //No lo uso
+    /*public List<Presupuesto> ListarPresupuestos() //No lo uso
     {
         List<Presupuesto> presupuestos = new List<Presupuesto>();
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
@@ -107,7 +118,7 @@ class PresupuestoRepository
             connection.Close();
         }
         return presupuestos;
-    }
+    }*/
 
     public Presupuesto ObtenerPresupuestoPorId(int id)
     {
@@ -116,20 +127,26 @@ class PresupuestoRepository
 
         string query = @"SELECT 
             P.idPresupuesto,
-            P.NombreDestinatario,
+            P.IdCliente,
             P.FechaCreacion,
             PR.idProducto,
             PR.Descripcion AS Producto,
             PR.Precio,
-            PD.Cantidad
+            PD.Cantidad,
+            COALESCE(C.Nombre, 'No se asigno cliente') AS cliente,
+            C.Email,
+            C.Telefono
         FROM 
             Presupuestos P
         LEFT JOIN 
             PresupuestosDetalle PD ON P.idPresupuesto = PD.idPresupuesto
         LEFT JOIN 
             Productos PR ON PD.idProducto = PR.idProducto
+        LEFT JOIN Cliente C ON P.IdCliente = C.ClienteId
         WHERE 
             P.idPresupuesto = @id;";
+
+        Cliente cliente = null; //Está bien que sea nulo si no hay ningún cliente?
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
@@ -143,7 +160,11 @@ class PresupuestoRepository
                 {
                     if(cont == 1)
                     {
-                        presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), reader["NombreDestinatario"].ToString(), Convert.ToDateTime(reader["FechaCreacion"]));
+                        if(!reader.IsDBNull(reader.GetOrdinal("IdCliente")))
+                        {
+                            cliente = new Cliente(Convert.ToInt32(reader["IdCliente"]), reader["Nombre"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
+                        }
+                        presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), cliente, Convert.ToDateTime(reader["FechaCreacion"]));
                     }
                     if(!reader.IsDBNull(reader.GetOrdinal("idProducto")))
                     {
@@ -182,14 +203,14 @@ class PresupuestoRepository
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = @"UPDATE Presupuestos SET NombreDestinatario = @destinatario, FechaCreacion = @fecha WHERE idPresupuesto = @Id";
+        string query = @"UPDATE Presupuestos SET FechaCreacion = @fecha, ClienteId = @ClienteId WHERE idPresupuesto = @Id";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query,connection);
-            command.Parameters.AddWithValue("@destinatario", presupuesto.NombreDestinatario);
             command.Parameters.AddWithValue("@fecha", presupuesto.FechaCreacion);
+            command.Parameters.AddWithValue("@ClienteId", presupuesto.Cliente.ClienteId);
             command.Parameters.AddWithValue("@Id", presupuesto.IdPresupuesto);
             command.ExecuteNonQuery();
             connection.Close();            
