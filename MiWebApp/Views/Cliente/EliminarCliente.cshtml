@@ -1,0 +1,18 @@
+@model Cliente
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2 class="text-center">Cliente</h2>
+        <p class="text-center"><strong>Cliente:</strong> @Model.Nombre</p>
+        <p class="text-center"><strong>Email:</strong> @Model.Email</p>
+        <p class="text-center"><strong>Telefono:</strong> @Model.Telefono</p>
+    </div>
+    <p class="text-center">¿Desea eliminar este cliente?</p>
+    <div class="text-center">
+        <form asp-controller="Cliente" asp-action="EliminarClienteId" method="post">
+            <input type="hidden" name="ClienteId" value="@Model.ClienteId" />
+            <button type="submit" class="btn btn-success">Eliminar</button>
+            <a asp-controller="Cliente" asp-action="Index" class="btn btn-danger">Cancelar</a>
+        </form>
+    </div>
+</div>

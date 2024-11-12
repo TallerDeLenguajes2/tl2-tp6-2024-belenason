@@ -1,0 +1,52 @@
+@model List<Cliente>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<main class="container my-4">
+    <header>
+        <h2 class="text-center">Lista de Clientes</h2>
+    </header>
+
+    <section aria-labelledby="clientes-lista">
+        <table class="table table-bordered table-hover">
+            <caption id="clientes-lista">Lista de clientes disponibles</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cliente in Model)
+                {
+                    <tr>
+                        <td>@cliente.Nombre</td>
+                        <td>@cliente.Email</td>
+                        <td>@cliente.Telefono</td>
+                        <td>
+                            <a asp-controller="Cliente" asp-action="ModificarCliente" asp-route-ClienteId="@cliente.ClienteId" class="btn btn-warning btn-sm">Editar</a>
+                            <a asp-controller="Cliente" asp-action="EliminarCliente" asp-route-ClienteId="@cliente.ClienteId" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+
+    <footer class="text-center mt-4">
+        <a asp-controller="Cliente" asp-action="AltaCliente" class="btn btn-success">Alta cliente</a>
+    </footer>
+</main>
+
+</body>
+</html>

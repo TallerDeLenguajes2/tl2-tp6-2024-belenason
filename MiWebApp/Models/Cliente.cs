@@ -17,4 +17,9 @@ public class Cliente
         this.Email = emailCliente;
         this.Telefono = telCliente;
     }
+
+    public Cliente()
+    {
+        
+    }
 }

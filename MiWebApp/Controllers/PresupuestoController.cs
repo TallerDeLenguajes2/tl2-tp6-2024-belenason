@@ -22,6 +22,13 @@ public class PresupuestoController : Controller
     [HttpGet]
     public IActionResult AltaPresupuesto()
     {
+        ClienteRepository repoClientes = new ClienteRepository();
+        List<Cliente> Clientes = repoClientes.ListarClientes();
+        ViewData["Clientes"] =  Clientes.Select(c=> new SelectListItem
+        {
+            Value = c.ClienteId.ToString(), 
+            Text = c.Nombre
+        }).ToList();
         return View();
     }
 
@@ -37,14 +44,25 @@ public class PresupuestoController : Controller
     public IActionResult ModificarPresupuesto(int IdPresupuesto)
     {
         var presupuesto = repoPresupuestos.ObtenerPresupuestoPorId(IdPresupuesto);
+        ClienteRepository repoClientes = new ClienteRepository();
+        List<Cliente> Clientes = repoClientes.ListarClientes();
+        ViewData["Clientes"] =  Clientes.Select(c=> new SelectListItem
+        {
+            Value = c.ClienteId.ToString(), 
+            Text = c.Nombre
+        }).ToList();
         return View(presupuesto);
     }
 
     [HttpPost]
     public IActionResult ModificarPresupuesto(Presupuesto presupuesto)
     {
+    if (ModelState.IsValid)
+    {
         repoPresupuestos.ModificarPresupuesto(presupuesto);
-        return RedirectToAction ("Index");
+        return RedirectToAction("Index");
+    }
+        return View (presupuesto);
     }
 
     [HttpGet]
@@ -95,9 +113,9 @@ public class PresupuestoController : Controller
     }
 
     [HttpPost]
-    public IActionResult EliminarProductoEnPresupuesto(int IdPresupuesto, int IdProducto, int cantidad)
+    public IActionResult EliminarProductoEnPresupuesto1(int IdPresupuesto, int IdProducto) //Preguntar al profe x q me decia que era ambiguo si solo tengo uno con ese nombre
     {
-        repoPresupuestos.EliminarProducto(IdProducto, IdPresupuesto);
+        repoPresupuestos.EliminarProducto(IdPresupuesto, IdProducto);
         return RedirectToAction ("Index");
     }
 

@@ -1,15 +1,21 @@
 @model Presupuesto
 
-<h2>Crear Nuevo Producto</h2>
+<h2>Crear Nuevo Presupuesto</h2>
 
 <form asp-controller= "Presupuesto" asp-action="CrearPresupuesto" method="post">
     <div class="form-group">
         <label asp-for="IdPresupuesto">ID del Presupuesto</label>
         <input asp-for="IdPresupuesto" class="form-control" required />
     </div>
-    <div class="form-group">
-        <label asp-for="NombreDestinatario">Nombre del destinatario</label>
-        <input asp-for="NombreDestinatario" class="form-control" required />
+    <div class="mb-3">
+        <label for="ClienteId" class="form-label">Cliente</label>
+        <select name="ClienteId" class="form-control" required>
+            <option value="">Seleccione un cliente</option>
+            @foreach (var cliente in (IEnumerable<SelectListItem>)ViewData["Clientes"])
+            {
+                <option value="@cliente.Value">@cliente.Text</option>
+            }
+        </select>
     </div>
     <div class="mb-3">
         <label asp-for="FechaCreacion" class="form-label">Fecha de Creación</label>

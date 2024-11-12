@@ -28,13 +28,13 @@ class PresupuestoRepository
             idPresupuesto,
             FechaCreacion,
             P.ClienteId, 
-            COLEASCE(C.Nombre, 'No se asigno cliente') AS Cliente,
+            COALESCE(C.Nombre, 'No se asigno cliente') AS Cliente,
             C.Email,
             C.Telefono
         FROM 
             Presupuestos P
         LEFT JOIN 
-            Clientes C ON P.IdCliente = C.ClienteId;";
+            Clientes C ON P.ClienteId = C.IdCliente;";
 
         Cliente cliente = null; //Está bien que sea nulo si no hay ningún cliente?
 
@@ -47,9 +47,9 @@ class PresupuestoRepository
             {
                 while (reader.Read())
                 {
-                    if(!reader.IsDBNull(reader.GetOrdinal("IdCliente")))
+                    if(!reader.IsDBNull(reader.GetOrdinal("ClienteId")))
                     {
-                        cliente = new Cliente(Convert.ToInt32(reader["IdCliente"]), reader["Cliente"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
+                        cliente = new Cliente(Convert.ToInt32(reader["ClienteId"]), reader["Cliente"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
                     }
                     Presupuesto presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), cliente, Convert.ToDateTime(reader["FechaCreacion"]));
                     presupuestos.Add(presupuesto);
@@ -127,7 +127,7 @@ class PresupuestoRepository
 
         string query = @"SELECT 
             P.idPresupuesto,
-            P.IdCliente,
+            P.ClienteId,
             P.FechaCreacion,
             PR.idProducto,
             PR.Descripcion AS Producto,
@@ -142,7 +142,7 @@ class PresupuestoRepository
             PresupuestosDetalle PD ON P.idPresupuesto = PD.idPresupuesto
         LEFT JOIN 
             Productos PR ON PD.idProducto = PR.idProducto
-        LEFT JOIN Cliente C ON P.IdCliente = C.ClienteId
+        LEFT JOIN Clientes C ON P.ClienteId = C.IdCliente
         WHERE 
             P.idPresupuesto = @id;";
 
@@ -160,9 +160,9 @@ class PresupuestoRepository
                 {
                     if(cont == 1)
                     {
-                        if(!reader.IsDBNull(reader.GetOrdinal("IdCliente")))
+                        if(!reader.IsDBNull(reader.GetOrdinal("ClienteId")))
                         {
-                            cliente = new Cliente(Convert.ToInt32(reader["IdCliente"]), reader["Nombre"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
+                            cliente = new Cliente(Convert.ToInt32(reader["ClienteId"]), reader["Cliente"].ToString(), reader["Email"].ToString(), reader["Telefono"].ToString());
                         }
                         presupuesto = new Presupuesto(Convert.ToInt32(reader["idPresupuesto"]), cliente, Convert.ToDateTime(reader["FechaCreacion"]));
                     }
@@ -215,8 +215,6 @@ class PresupuestoRepository
             command.ExecuteNonQuery();
             connection.Close();            
         }
-
-
     }
 
     public void EliminarpresupuestoPorId(int idPresupuesto)

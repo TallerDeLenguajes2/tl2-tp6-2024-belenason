@@ -109,7 +109,7 @@ class ClienteRepository
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
-        string query = $"DELETE FROM Clientes WHERE IdCliente = @idCliente";
+        string query = $"DELETE FROM Clientes WHERE IdCliente = @IdCliente";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
