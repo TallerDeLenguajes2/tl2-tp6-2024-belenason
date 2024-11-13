@@ -1,4 +1,4 @@
-@model Presupuesto
+@model ModificarPresupuestoViewModel
 
 <h2>Modificar Presupuesto</h2>
 
@@ -6,7 +6,7 @@
     <input type="hidden" asp-for="IdPresupuesto" />
     <div class="mb-3">
         <label for="ClienteId" class="form-label">Cliente</label>
-        <select name="Cliente.ClienteId" class="form-control" required> @*El problema que tenia era por poner ClienteId y no Cliente.ClienteId*@
+        <select name="ClienteId" class="form-control" required> @*El problema que tenia era por poner ClienteId y no Cliente.ClienteId*@
             <option value="">Seleccione un cliente</option>
             @foreach (var cliente in (IEnumerable<SelectListItem>)ViewData["Clientes"])
             {

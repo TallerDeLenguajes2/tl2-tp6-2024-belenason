@@ -33,7 +33,7 @@ public class PresupuestoController : Controller
     }
 
     [HttpPost]
-    public IActionResult CrearPresupuesto(Presupuesto presupuesto)
+    public IActionResult CrearPresupuesto(AltaPresupuestoViewModel presupuesto)
     {
         repoPresupuestos.CrearPresupuesto(presupuesto);
         return RedirectToAction ("Index");
@@ -55,7 +55,7 @@ public class PresupuestoController : Controller
     }
 
     [HttpPost]
-    public IActionResult ModificarPresupuesto(Presupuesto presupuesto)
+    public IActionResult ModificarPresupuesto(ModificarPresupuestoViewModel presupuesto)
     {
     if (ModelState.IsValid)
     {
