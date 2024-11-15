@@ -1,7 +1,7 @@
 using Microsoft.Data.Sqlite;
 class ClienteRepository
 {
-    public void CrearCliente(AltaClienteViewModel cliente)
+    public void CrearCliente(Cliente cliente)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
@@ -20,7 +20,7 @@ class ClienteRepository
         }
     }
 
-    public void ModificarCliente(ModificarClienteViewModel cliente)
+    public void ModificarCliente(Cliente cliente)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 

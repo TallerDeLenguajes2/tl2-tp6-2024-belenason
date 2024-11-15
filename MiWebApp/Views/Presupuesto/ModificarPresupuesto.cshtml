@@ -3,7 +3,7 @@
 <h2>Modificar Presupuesto</h2>
 
 <form asp-controller="Presupuesto" asp-action="ModificarPresupuesto" method="post">
-    <input type="hidden" asp-for="IdPresupuesto" />
+    <input type="hidden" asp-for="IdPresupuesto" value = "@Model.IdPresupuesto"/>
     <div class="mb-3">
         <label for="ClienteId" class="form-label">Cliente</label>
         <select name="ClienteId" class="form-control" required> @*El problema que tenia era por poner ClienteId y no Cliente.ClienteId*@
@@ -13,10 +13,12 @@
                 <option value="@cliente.Value">@cliente.Text</option>
             }
         </select>
+        <span asp-validation-for="ClienteId" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="FechaCreacion" class="form-label">Fecha de Creación</label>
         <input asp-for="FechaCreacion" type="date" class="form-control" />
+        <span asp-validation-for="FechaCreacion" class="text-danger"></span>
     </div>
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Guardar cambios</button>
@@ -24,3 +26,4 @@
     </div>
 
 </form>
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}

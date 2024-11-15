@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 public class AltaProductoViewModel
 {
     string descripcion;
-    double precio;
+    int precio;
 
     public AltaProductoViewModel()
     {
@@ -14,5 +14,5 @@ public class AltaProductoViewModel
 
     [Required(ErrorMessage = "El precio es obligatorio.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser un valor positivo.")]
-    public double Precio { get => precio; set => precio = value; }
+    public int Precio { get => precio; set => precio = value; }
 }

@@ -1,7 +1,7 @@
 using Microsoft.Data.Sqlite;
 class PresupuestoRepository
 {
-    public void CrearPresupuesto(AltaPresupuestoViewModel presupuesto) //NO EJECUTAR SIN REVISAR
+    public void CrearPresupuesto(Presupuesto presupuesto) //NO EJECUTAR SIN REVISAR
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
@@ -12,7 +12,7 @@ class PresupuestoRepository
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
             command.Parameters.AddWithValue("@FechaCreacion", presupuesto.FechaCreacion);
-            command.Parameters.AddWithValue("@ClienteId", presupuesto.ClienteId);
+            command.Parameters.AddWithValue("@ClienteId", presupuesto.Cliente.ClienteId);
             command.ExecuteNonQuery();
             connection.Close();
             
@@ -199,7 +199,7 @@ class PresupuestoRepository
         }
     }
 
-    public void ModificarPresupuesto(ModificarPresupuestoViewModel presupuesto)
+    public void ModificarPresupuesto(Presupuesto presupuesto)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
@@ -210,7 +210,7 @@ class PresupuestoRepository
             connection.Open();
             SqliteCommand command = new SqliteCommand(query,connection);
             command.Parameters.AddWithValue("@fecha", presupuesto.FechaCreacion);
-            command.Parameters.AddWithValue("@ClienteId", presupuesto.ClienteId);
+            command.Parameters.AddWithValue("@ClienteId", presupuesto.Cliente.ClienteId);
             command.Parameters.AddWithValue("@Id", presupuesto.IdPresupuesto);
             command.ExecuteNonQuery();
             connection.Close();            

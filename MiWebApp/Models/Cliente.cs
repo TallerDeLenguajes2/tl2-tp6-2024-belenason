@@ -22,4 +22,19 @@ public class Cliente
     {
         
     }
+
+    public Cliente(AltaClienteViewModel clienteVM)
+    {
+        this.Nombre = clienteVM.Nombre;
+        this.Email = clienteVM.Email;
+        this.Telefono = clienteVM.Telefono;
+    }
+
+    public Cliente(ModificarClienteViewModel clienteVM)
+    {
+        this.ClienteId = clienteVM.ClienteId;
+        this.Nombre = clienteVM.Nombre;
+        this.Email = clienteVM.Email;
+        this.Telefono = clienteVM.Telefono;
+    }
 }

@@ -8,10 +8,7 @@
     </div>
     <p class="text-center">¿Desea eliminar este Presupuesto?</p>
     <div class="text-center">
-        <form asp-controller="Presupuesto" asp-action="EliminarPresupuestoId" method="post">
-            <input type="hidden" name="IdPresupuesto" value="@Model.IdPresupuesto" />
-            <button type="submit" class="btn btn-success">Eliminar</button>
-            <a asp-controller="Presupuesto" asp-action="Index" class="btn btn-danger">Cancelar</a>
-        </form>
+        <a asp-controller="Presupuestos" asp-action="EliminarPresupuestoId" asp-route-id="@Model.IdPresupuesto" class="btn btn-success">Eliminar</a>
+        <a asp-controller="Presupuestos" asp-action="Index" class="btn btn-danger">Cancelar</a>
     </div>
 </div>
