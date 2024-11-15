@@ -11,6 +11,14 @@ public class ModificarClienteViewModel
     {
     }
 
+    public ModificarClienteViewModel(Cliente cliente)
+    {
+        clienteId = cliente.ClienteId;
+        nombre = cliente.Nombre;
+        email = cliente.Email;
+        telefono = cliente.Telefono;
+    }
+
     public int ClienteId { get => clienteId; set => clienteId = value; }
 
     [Required(ErrorMessage = "El nombre es obligatorio.")]

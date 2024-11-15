@@ -16,6 +16,21 @@ public class Presupuesto
     {
         this.Detalle = new List<PresupuestosDetalle>();
     }
+
+    public Presupuesto(AltaPresupuestoViewModel presuVM)
+    {
+        this.Cliente = new Cliente();
+        this.Cliente.ClienteId = presuVM.ClienteId;
+        this.FechaCreacion = presuVM.FechaCreacion;
+    }
+
+    public Presupuesto(ModificarPresupuestoViewModel presuVM)
+    {
+        IdPresupuesto = presuVM.IdPresupuesto;
+        Cliente = new Cliente();
+        Cliente.ClienteId = presuVM.ClienteId;
+        FechaCreacion = presuVM.FechaCreacion;
+    }
     
     public Presupuesto(int idPresupuesto, Cliente cliente, DateTime fecha, List<PresupuestosDetalle> detalle)
     {

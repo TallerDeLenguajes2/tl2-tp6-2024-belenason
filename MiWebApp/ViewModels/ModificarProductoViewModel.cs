@@ -4,10 +4,17 @@ public class ModificarProductoViewModel
 {
     int idProducto;
     string descripcion;
-    double precio;
+    int precio;
 
     public ModificarProductoViewModel()
     {
+    }
+
+    public ModificarProductoViewModel(Producto producto)
+    {
+        idProducto = producto.IdProducto;
+        descripcion = producto.Descripcion;
+        precio = producto.Precio;
     }
 
     public int IdProducto { get => idProducto; set => idProducto = value; }
@@ -16,5 +23,5 @@ public class ModificarProductoViewModel
 
     [Required(ErrorMessage = "El precio es obligatorio.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser un valor positivo.")]
-    public double Precio { get => precio; set => precio = value; }
+    public int Precio { get => precio; set => precio = value; }
 }

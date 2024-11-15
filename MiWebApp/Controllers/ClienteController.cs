@@ -25,12 +25,13 @@ public class ClienteController : Controller
     }
 
     [HttpPost]
-    public IActionResult CrearCliente(AltaClienteViewModel cliente)
+    public IActionResult CrearCliente(AltaClienteViewModel clienteVM)
     {
         if (!ModelState.IsValid)
         {
             return RedirectToAction("Index");
         }
+        var cliente = new Cliente(clienteVM);
         repoClientes.CrearCliente(cliente);
         return RedirectToAction ("Index");
 
@@ -40,14 +41,17 @@ public class ClienteController : Controller
     public IActionResult ModificarCliente(int ClienteId)
     {
         var cliente = repoClientes.ObtenerClientePorId(ClienteId);
-        return View(cliente);
+        var clienteVM = new ModificarClienteViewModel(cliente);
+        return View(clienteVM);
     }
 
     [HttpPost]
-    public IActionResult ModificarCliente(ModificarClienteViewModel cliente)
+    public IActionResult ModificarCliente(ModificarClienteViewModel clienteVM)
     {
+        if(!ModelState.IsValid) return RedirectToAction ("Index");
+        var cliente = new Cliente(clienteVM);
         repoClientes.ModificarCliente(cliente);
-        return RedirectToAction ("Index");
+        return RedirectToAction ("Index"); 
     }
 
     [HttpGet]

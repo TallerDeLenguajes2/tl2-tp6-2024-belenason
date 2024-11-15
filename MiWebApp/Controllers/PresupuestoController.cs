@@ -33,9 +33,14 @@ public class PresupuestoController : Controller
     }
 
     [HttpPost]
-    public IActionResult CrearPresupuesto(AltaPresupuestoViewModel presupuesto)
+    public IActionResult CrearPresupuesto(AltaPresupuestoViewModel presupVM)
     {
-        repoPresupuestos.CrearPresupuesto(presupuesto);
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction("Index");
+        }
+        var presu = new Presupuesto(presupVM);
+        repoPresupuestos.CrearPresupuesto(presu);
         return RedirectToAction ("Index");
 
     }
@@ -43,7 +48,6 @@ public class PresupuestoController : Controller
     [HttpGet]
     public IActionResult ModificarPresupuesto(int IdPresupuesto)
     {
-        var presupuesto = repoPresupuestos.ObtenerPresupuestoPorId(IdPresupuesto);
         ClienteRepository repoClientes = new ClienteRepository();
         List<Cliente> Clientes = repoClientes.ListarClientes();
         ViewData["Clientes"] =  Clientes.Select(c=> new SelectListItem
@@ -51,18 +55,23 @@ public class PresupuestoController : Controller
             Value = c.ClienteId.ToString(), 
             Text = c.Nombre
         }).ToList();
-        return View(presupuesto);
+        var presupuesto = repoPresupuestos.ObtenerPresupuestoPorId(IdPresupuesto);
+        var presupuestoVM = new ModificarPresupuestoViewModel();
+        presupuestoVM.IdPresupuesto = IdPresupuesto;
+        presupuestoVM.FechaCreacion = presupuesto.FechaCreacion;
+        return View(presupuestoVM);
     }
 
     [HttpPost]
-    public IActionResult ModificarPresupuesto(ModificarPresupuestoViewModel presupuesto)
+    public IActionResult ModificarPresupuesto(ModificarPresupuestoViewModel presuVM)
     {
-    if (ModelState.IsValid)
+    if (!ModelState.IsValid)
     {
-        repoPresupuestos.ModificarPresupuesto(presupuesto);
         return RedirectToAction("Index");
     }
-        return View (presupuesto);
+        var presupuesto = new Presupuesto(presuVM);
+        repoPresupuestos.ModificarPresupuesto(presupuesto);
+        return RedirectToAction ("Index");
     }
 
     [HttpGet]
@@ -88,14 +97,16 @@ public class PresupuestoController : Controller
             Value = p.IdProducto.ToString(), 
             Text = p.Descripcion 
         }).ToList();
-
-        return View(IdPresupuesto);
+        var model = new AgregarProduAPresuViewModel();
+        model.IdPresupuesto = IdPresupuesto;
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult AgregarProductoEnPresupuesto(int IdPresupuesto, int IdProducto, int cantidad)
+    public IActionResult AgregarProductoEnPresupuesto(AgregarProduAPresuViewModel infoProducto)
     {
-        repoPresupuestos.AgregarProductoCantidadPresupuesto(IdProducto, cantidad, IdPresupuesto);
+        if(!ModelState.IsValid) return RedirectToAction ("Index");
+        repoPresupuestos.AgregarProductoCantidadPresupuesto(infoProducto.IdProducto, infoProducto.Cantidad, infoProducto.IdPresupuesto);
         return RedirectToAction ("Index");
     }
 

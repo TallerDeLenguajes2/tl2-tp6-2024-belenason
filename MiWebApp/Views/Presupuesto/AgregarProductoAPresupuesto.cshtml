@@ -1,8 +1,8 @@
-@model int
+@model AgregarProduAPresuViewModel
 
 <form asp-controller="Presupuesto" asp-action="AgregarProductoEnPresupuesto" method="post" class="container mt-4">
 
-    <input type="hidden" name="IdPresupuesto" value="@Model" />
+    <input type="hidden" asp-for="IdPresupuesto" value="@Model.IdPresupuesto" />
     
     <div class="mb-3">
         <label for="IdProducto" class="form-label">Producto</label>
@@ -13,12 +13,16 @@
                 <option value="@producto.Value">@producto.Text</option>
             }
         </select>
+        <span asp-validation-for="IdProducto" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="cantidad" class="form-label">Cantidad</label>
-        <input name="cantidad" class="form-control" type="number" required min="1" />
+        <label asp-for="Cantidad" class="form-label">Cantidad</label>
+        <input asp-for="Cantidad" class="form-control" type="number" required min="1" />
+        <span asp-validation-for="Cantidad" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary mt-2">Agregar Producto</button>
 </form>
+
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
