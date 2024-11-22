@@ -11,6 +11,12 @@
 <body>
 
 <main class="container my-4">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     <header>
         <h2 class="text-center">Lista de Presupuestos</h2>
     </header>
@@ -22,7 +28,7 @@
                 <tr>
                     <th scope="col">Cliente</th>
                     <th scope="col">Fecha de creacion</th>
-                    <th scope="col">Acciones</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,11 +38,14 @@
                         <td>@presupuesto.Cliente.Nombre</td>
                         <td>@presupuesto.FechaCreacion.ToShortDateString()</td>
                         <td>
-                            <a asp-controller="Presupuesto" asp-action="ModificarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-warning btn-sm">Editar</a>
-                            <a asp-controller="Presupuesto" asp-action="EliminarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-danger btn-sm">Eliminar</a>
-                            <a asp-controller="Presupuesto" asp-action="AgregarProductoAPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-primary btn-sm">Agregar Producto</a>
-                            <a asp-controller="Presupuesto" asp-action="EliminarProductoDePresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-secondary btn-sm">Eliminar Producto</a>
                             <a asp-controller="Presupuesto" asp-action="DetallesPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-dark btn-sm">Detalles</a>
+                            @if ((bool)ViewData["EsAdmin"])
+                            {
+                                <a asp-controller="Presupuesto" asp-action="ModificarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-warning btn-sm">Editar</a>
+                                <a asp-controller="Presupuesto" asp-action="EliminarPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-danger btn-sm">Eliminar</a>
+                                <a asp-controller="Presupuesto" asp-action="AgregarProductoAPresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-primary btn-sm">Agregar Producto</a>
+                                <a asp-controller="Presupuesto" asp-action="EliminarProductoDePresupuesto" asp-route-IdPresupuesto="@presupuesto.IdPresupuesto" class="btn btn-secondary btn-sm">Eliminar Producto</a>
+                            }
 
                         </td>
                     </tr>
@@ -46,7 +55,10 @@
     </section>
 
     <footer class="text-center mt-4">
-        <a asp-controller="Presupuesto" asp-action="AltaPresupuesto" class="btn btn-success">Alta presupuesto</a>
+        @if ((bool)ViewData["EsAdmin"])
+        {
+            <a asp-controller="Presupuesto" asp-action="AltaPresupuesto" class="btn btn-success">Alta presupuesto</a>
+        }
     </footer>
 </main>
 

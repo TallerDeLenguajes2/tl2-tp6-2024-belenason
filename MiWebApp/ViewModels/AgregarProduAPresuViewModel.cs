@@ -10,7 +10,6 @@ public class AgregarProduAPresuViewModel
     {
     }
 
-
     public int IdPresupuesto { get => idPresupuesto; set => idPresupuesto = value; }
 
 

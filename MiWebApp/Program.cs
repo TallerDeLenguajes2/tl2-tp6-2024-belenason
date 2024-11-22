@@ -1,5 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<IUserRepository, InMemoryUserRepository>();
+builder.Services.AddSingleton<IClienteRepository,ClienteRepository>();
+builder.Services.AddSingleton<IPresupuestoRepository, PresupuestoRepository>();
+builder.Services.AddSingleton<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 // Habilitar servicios de sesiones
 builder.Services.AddSession(options =>
 {

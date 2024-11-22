@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 public class LoginController : Controller
 {
     private readonly IUserRepository _userRepository;
+    private readonly ILogger<LoginController> _logger;
     public LoginController(IUserRepository userRepository)
     {
         _userRepository = userRepository;
@@ -12,7 +13,8 @@ public class LoginController : Controller
     {
         var model = new LoginViewModel
         {
-            IsAuthenticated = HttpContext.Session.GetString("IsAuthenticated") == "true"
+            IsAuthenticated = HttpContext.Session.GetString("IsAuthenticated") == "true",
+            Username = HttpContext.Session.GetString("User") //X q yo le tuve que agregar esto?
         };
         return View(model);
     }
@@ -28,8 +30,8 @@ public class LoginController : Controller
         if (usuario != null)
         {
             HttpContext.Session.SetString("IsAuthenticated", "true");
-            HttpContext.Session.SetString("User", usuario.Username);
-            HttpContext.Session.SetString("AccessLevel,", usuario.AccessLevel.ToString());
+            HttpContext.Session.SetString("User", usuario.Usuario);
+            HttpContext.Session.SetString("AccessLevel", usuario.Rol.ToString());
 
             return RedirectToAction("Index", "Home");
         }
@@ -48,6 +50,23 @@ public class LoginController : Controller
 
         // Redirigir a la vista de login
         return RedirectToAction("Index");
-    }
-    
+    }
+
+    [HttpGet]
+
+    public IActionResult CrearUsuario()
+    {
+        return View();
+    }
+
+    [HttpPost]
+
+    public IActionResult AltaUsuario(CrearUsuarioViewModel usuarioVM)
+    {
+
+        if(!ModelState.IsValid) return RedirectToAction ("CrearUsuario");
+        User usuario = new User(usuarioVM);
+        _userRepository.AltaUsuario(usuario);
+        return RedirectToAction("Index");
+    }
 }

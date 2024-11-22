@@ -1,5 +1,6 @@
 @model List<Cliente>
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,7 +11,17 @@
 </head>
 <body>
 
+
+
 <main class="container my-4">
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
     <header>
         <h2 class="text-center">Lista de Clientes</h2>
     </header>
@@ -23,7 +34,10 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">E-mail</th>
                     <th scope="col">Telefono</th>
-                    <th scope="col">Acciones</th>
+                    @if ((bool)ViewData["EsAdmin"])
+                    {
+                        <th>Acciones</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -33,10 +47,13 @@
                         <td>@cliente.Nombre</td>
                         <td>@cliente.Email</td>
                         <td>@cliente.Telefono</td>
-                        <td>
-                            <a asp-controller="Cliente" asp-action="ModificarCliente" asp-route-ClienteId="@cliente.ClienteId" class="btn btn-warning btn-sm">Editar</a>
-                            <a asp-controller="Cliente" asp-action="EliminarCliente" asp-route-ClienteId="@cliente.ClienteId" class="btn btn-danger btn-sm">Eliminar</a>
-                        </td>
+                        @if ((bool)ViewData["EsAdmin"])
+                        {
+                            <td>
+                                <a asp-controller="Cliente" asp-action="ModificarCliente" asp-route-ClienteId="@cliente.ClienteId" class="btn btn-warning btn-sm">Editar</a>
+                                <a asp-controller="Cliente" asp-action="EliminarCliente" asp-route-ClienteId="@cliente.ClienteId" class="btn btn-danger btn-sm">Eliminar</a>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
@@ -44,7 +61,10 @@
     </section>
 
     <footer class="text-center mt-4">
-        <a asp-controller="Cliente" asp-action="AltaCliente" class="btn btn-success">Alta cliente</a>
+        @if ((bool)ViewData["EsAdmin"])
+        {
+            <a asp-controller="Cliente" asp-action="AltaCliente" class="btn btn-success">Alta cliente</a>
+        }
     </footer>
 </main>
 

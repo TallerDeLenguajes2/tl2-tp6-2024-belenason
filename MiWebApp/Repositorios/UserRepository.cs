@@ -28,7 +28,7 @@ public class UserRepository : IUserRepository
                 if (reader.Read())
                 {
                     user = new User();
-                    user.IdUsuario = Convert.ToInt32(reader["id"]);
+                    user.IdUsuario = Convert.ToInt32(reader["IdUsuario"]);
                     user.Nombre = reader["Nombre"].ToString();
                     user.Usuario = reader["Usuario"].ToString();
                     user.Contrasena = reader["Contrasena"].ToString();

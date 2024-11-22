@@ -1,4 +1,7 @@
+
+
 public interface IUserRepository
 {
-    User GetUser (string username, string password);
+    public User GetUser(string usuario, string contra);
+    public void AltaUsuario(User usuario);
 }
