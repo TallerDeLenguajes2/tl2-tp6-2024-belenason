@@ -1,5 +1,5 @@
 using Microsoft.Data.Sqlite;
-class ClienteRepository
+class ClienteRepository : IClienteRepository
 {
     public void CrearCliente(Cliente cliente)
     {

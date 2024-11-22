@@ -1,7 +1,7 @@
 using Microsoft.Data.Sqlite;
-class PresupuestoRepository
+class PresupuestoRepository : IPresupuestoRepository
 {
-    public void CrearPresupuesto(Presupuesto presupuesto) //NO EJECUTAR SIN REVISAR
+    public void CrearPresupuesto(Presupuesto presupuesto)
     {
         string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 

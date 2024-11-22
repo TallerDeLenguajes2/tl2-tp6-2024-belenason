@@ -1,5 +1,5 @@
 using Microsoft.Data.Sqlite;
-class ProductoRepository
+class ProductoRepository : IProductoRepository
 {
     public void CrearProducto(Producto producto)
     {
