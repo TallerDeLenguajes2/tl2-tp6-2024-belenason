@@ -15,6 +15,13 @@
 
 <main class="container my-4">
 
+    @if (ViewBag.ErrorMessage != null)
+    {
+            <div class="error-message">
+                <p>@ViewBag.ErrorMessage</p>
+            </div>
+    }
+
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger" role="alert">

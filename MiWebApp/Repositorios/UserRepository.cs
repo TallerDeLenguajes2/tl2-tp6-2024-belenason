@@ -38,6 +38,10 @@ public class UserRepository : IUserRepository
             }
             connection.Close();            
         }
+        if (user == null)
+        {
+            throw new Exception("Usuario inexistente.");
+        }
         return user;
     }
 

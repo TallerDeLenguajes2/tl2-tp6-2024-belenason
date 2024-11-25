@@ -57,6 +57,8 @@ class PresupuestoRepository : IPresupuestoRepository
             }
             connection.Close();
         }
+        //if (presupuestos.Count == 0)
+        //    throw new Exception("No se encontraron clientes en la base de datos.");
         return presupuestos;
     }
 
@@ -177,6 +179,8 @@ class PresupuestoRepository : IPresupuestoRepository
             }
             connection.Close();
         }
+        if (presupuesto == null)
+            throw new Exception($"No se encontró ningún presupuesto con id = {id}");
         return presupuesto;
     }
 
@@ -193,9 +197,10 @@ class PresupuestoRepository : IPresupuestoRepository
             command.Parameters.AddWithValue("@idPresup", idPresupuesto);
             command.Parameters.AddWithValue("@idProd", idProducto);
             command.Parameters.AddWithValue("@Cantidad", cantidad);
-            command.ExecuteNonQuery();
+            int rowsAffected = command.ExecuteNonQuery();
             connection.Close();
-            
+            if (rowsAffected == 0)
+                throw new Exception($"No se pudo agregar la cantidad del producto con IdProducto = {idProducto} al presupuesto con IdPresupuesto = {idPresupuesto}.");
         }
     }
 
@@ -212,8 +217,10 @@ class PresupuestoRepository : IPresupuestoRepository
             command.Parameters.AddWithValue("@fecha", presupuesto.FechaCreacion);
             command.Parameters.AddWithValue("@ClienteId", presupuesto.Cliente.ClienteId);
             command.Parameters.AddWithValue("@Id", presupuesto.IdPresupuesto);
-            command.ExecuteNonQuery();
-            connection.Close();            
+            int rowsAffected = command.ExecuteNonQuery();
+            connection.Close();
+            if (rowsAffected == 0)
+                throw new Exception($"No se encontró ningún presupuesto con id = {presupuesto.IdPresupuesto}.");      
         }
     }
 
@@ -233,9 +240,12 @@ class PresupuestoRepository : IPresupuestoRepository
             command.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
             command2.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
             command.ExecuteNonQuery();
-            command2.ExecuteNonQuery();
+            int rowsAffected = command2.ExecuteNonQuery();
 
             connection.Close();
+
+            if (rowsAffected == 0)
+                throw new Exception($"No se encontró ningún presupuesto con id = {idPresupuesto} para eliminar."); 
         }
     }
 
@@ -251,8 +261,11 @@ class PresupuestoRepository : IPresupuestoRepository
             SqliteCommand command = new SqliteCommand(query, connection);
             command.Parameters.AddWithValue("@idP", idPresupuesto);
             command.Parameters.AddWithValue("@idPR", idProducto);
-            command.ExecuteNonQuery();
+            int rowsAffected = command.ExecuteNonQuery();
             connection.Close();
+
+            if (rowsAffected == 0)
+                throw new Exception($"No se encontró ningún presupuesto con id = {idPresupuesto} que contenga un producto con id = {idProducto} para eliminar."); 
         }
     }
 
@@ -286,9 +299,10 @@ class PresupuestoRepository : IPresupuestoRepository
             }
             connection.Close();
         }
+        if (productos.Count == 0)
+            throw new Exception("El presupuesto no tiene productos asociados o es inexistente.");
         return productos;
     }
-
 
 }
 

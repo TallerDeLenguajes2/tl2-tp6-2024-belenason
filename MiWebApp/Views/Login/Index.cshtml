@@ -6,7 +6,16 @@
 
 <h2 class="text-center">@ViewData["Title"]</h2>
 
+
 <!-- Mostrar mensaje de error si existe -->
+
+@if (ViewBag.ErrorMessage != null)
+{
+        <div class="error-message">
+            <p>@ViewBag.ErrorMessage</p>
+        </div>
+}
+
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {
     <div class="alert alert-danger" role="alert">

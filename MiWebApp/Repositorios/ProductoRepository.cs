@@ -34,9 +34,11 @@ class ProductoRepository : IProductoRepository
             command.Parameters.AddWithValue("@Precio", producto.Precio);
             command.Parameters.AddWithValue("@Descripcion", producto.Descripcion);
 
-            command.ExecuteNonQuery();
+            int rowsAffected = command.ExecuteNonQuery();
             connection.Close();
             
+            if (rowsAffected == 0)
+                throw new Exception($"No se encontró ningún producto con id = {producto.IdProducto}.");
         }
     }
 
@@ -100,6 +102,9 @@ class ProductoRepository : IProductoRepository
             connection.Close();
             
         }
+        if (producto == null)
+            throw new Exception("Producto inexistente.");
+
         return producto;
     }
 
@@ -114,9 +119,11 @@ class ProductoRepository : IProductoRepository
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
             command.Parameters.AddWithValue("@idProducto", idProducto);
-            command.ExecuteNonQuery();
+            int rowsAffected = command.ExecuteNonQuery();
             connection.Close();
             
+            if (rowsAffected == 0)
+                throw new Exception($"No se encontró ningún producto con id = {idProducto}.");
         }
     }
 

@@ -35,10 +35,12 @@ class ClienteRepository : IClienteRepository
             command.Parameters.AddWithValue("@mail", cliente.Email);
             command.Parameters.AddWithValue("@tel", cliente.Telefono);
             command.Parameters.AddWithValue("@idCliente", cliente.ClienteId);
+            int rowsAffected = command.ExecuteNonQuery();
 
-            command.ExecuteNonQuery();
             connection.Close();
             
+            if (rowsAffected == 0)
+            throw new Exception($"No se encontró ningún cliente con IdCliente = {cliente.ClienteId}.");
         }
     }
 
@@ -69,6 +71,8 @@ class ClienteRepository : IClienteRepository
             connection.Close();
             
         }
+        //if (clientes.Count == 0)
+        //    throw new Exception("No se encontraron clientes en la base de datos.");
         return clientes;
     }
 
@@ -102,6 +106,8 @@ class ClienteRepository : IClienteRepository
             connection.Close();
             
         }
+        if (cliente == null)
+            throw new Exception($"No se encontró ningún cliente con IdCliente = {idCliente}");
         return cliente;
     }
 
@@ -116,9 +122,10 @@ class ClienteRepository : IClienteRepository
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
             command.Parameters.AddWithValue("@IdCliente", idCliente);
-            command.ExecuteNonQuery();
+            int rowsAffected = command.ExecuteNonQuery();
             connection.Close();
-            
+            if (rowsAffected == 0)
+                throw new Exception($"No se encontró ningún cliente con IdCliente = {idCliente} para eliminar.");
         }
     }
 
