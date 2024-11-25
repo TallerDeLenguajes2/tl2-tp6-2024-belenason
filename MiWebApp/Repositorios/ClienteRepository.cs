@@ -1,13 +1,19 @@
 using Microsoft.Data.Sqlite;
 class ClienteRepository : IClienteRepository
 {
+
+    private readonly string _ConnectionString;
+
+    public ClienteRepository(string CadenaDeConexion)
+    {
+        _ConnectionString = CadenaDeConexion;
+    }
+
     public void CrearCliente(Cliente cliente)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"INSERT INTO Clientes (Nombre, Email, Telefono) VALUES (@nombre, @email, @tel)";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -22,11 +28,10 @@ class ClienteRepository : IClienteRepository
 
     public void ModificarCliente(Cliente cliente)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
         string query = $"UPDATE Clientes SET Nombre = @nombre, Email = @mail, Telefono = @tel WHERE IdCliente = @idCliente";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -49,11 +54,9 @@ class ClienteRepository : IClienteRepository
 
         List<Cliente> clientes = new List<Cliente>();
 
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"SELECT * FROM Clientes";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
 
@@ -81,11 +84,9 @@ class ClienteRepository : IClienteRepository
 
         Cliente cliente;
 
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"SELECT * FROM Clientes WHERE IdCliente = @idCliente";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
 
@@ -113,11 +114,9 @@ class ClienteRepository : IClienteRepository
 
     public void EliminarClientePorId(int idCliente)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"DELETE FROM Clientes WHERE IdCliente = @IdCliente";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);

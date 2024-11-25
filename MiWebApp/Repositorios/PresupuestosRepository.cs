@@ -1,13 +1,18 @@
 using Microsoft.Data.Sqlite;
 class PresupuestoRepository : IPresupuestoRepository
 {
+
+    private readonly string _ConnectionString;
+
+    public PresupuestoRepository(string CadenaDeConexion)
+    {
+        _ConnectionString = CadenaDeConexion;
+    }
     public void CrearPresupuesto(Presupuesto presupuesto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"INSERT INTO Presupuestos (FechaCreacion, ClienteId) VALUES (@FechaCreacion, @ClienteId)";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -22,7 +27,6 @@ class PresupuestoRepository : IPresupuestoRepository
  public List<Presupuesto> ObtenerPresupuestos()
     {
         List<Presupuesto> presupuestos = new List<Presupuesto>();
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
         string query = @"SELECT 
             idPresupuesto,
@@ -38,7 +42,7 @@ class PresupuestoRepository : IPresupuestoRepository
 
         Cliente cliente = null; //Está bien que sea nulo si no hay ningún cliente?
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -125,7 +129,6 @@ class PresupuestoRepository : IPresupuestoRepository
     public Presupuesto ObtenerPresupuestoPorId(int id)
     {
         Presupuesto presupuesto = null;
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
         string query = @"SELECT 
             P.idPresupuesto,
@@ -150,7 +153,7 @@ class PresupuestoRepository : IPresupuestoRepository
 
         Cliente cliente = null; //Está bien que sea nulo si no hay ningún cliente?
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -186,11 +189,9 @@ class PresupuestoRepository : IPresupuestoRepository
 
     public void AgregarProductoCantidadPresupuesto(int idProducto, int cantidad, int idPresupuesto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresup, @idProd, @Cantidad) ON CONFLICT(idPresupuesto, idProducto) DO UPDATE SET Cantidad = Cantidad + @Cantidad;";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -206,11 +207,9 @@ class PresupuestoRepository : IPresupuestoRepository
 
     public void ModificarPresupuesto(Presupuesto presupuesto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = @"UPDATE Presupuestos SET FechaCreacion = @fecha, ClienteId = @ClienteId WHERE idPresupuesto = @Id";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query,connection);
@@ -226,12 +225,10 @@ class PresupuestoRepository : IPresupuestoRepository
 
     public void EliminarpresupuestoPorId(int idPresupuesto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"DELETE FROM presupuestos WHERE idPresupuesto = @idPresupuesto";
         string query2 = @"DELETE FROM PresupuestosDetalle WHERE idPresupuesto = @idPresupuesto;";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
 
@@ -251,11 +248,9 @@ class PresupuestoRepository : IPresupuestoRepository
 
     public void EliminarProducto(int idPresupuesto, int idProducto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = @"DELETE FROM PresupuestosDetalle WHERE idPresupuesto = @idP AND idProducto = @idPR";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -271,7 +266,6 @@ class PresupuestoRepository : IPresupuestoRepository
 
     public List<Producto> ListarProductosAsociadosAPresupuesto(int IdPresupuesto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
         List<Producto> productos = new List<Producto>();
 
         string query = @"SELECT p.IdProducto, p.Descripcion 
@@ -279,7 +273,7 @@ class PresupuestoRepository : IPresupuestoRepository
                         INNER JOIN PresupuestosDetalle pd ON p.IdProducto = pd.IdProducto
                         WHERE pd.IdPresupuesto = @IdPresupuesto";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);

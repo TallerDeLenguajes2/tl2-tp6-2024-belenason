@@ -1,13 +1,19 @@
 using Microsoft.Data.Sqlite;
 class ProductoRepository : IProductoRepository
 {
+
+    private readonly string _ConnectionString;
+
+    public ProductoRepository(string CadenaDeConexion)
+    {
+        _ConnectionString = CadenaDeConexion;
+    }
+
     public void CrearProducto(Producto producto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"INSERT INTO Productos (Descripcion, Precio) VALUES (@Descripcion, @Precio)";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -21,11 +27,9 @@ class ProductoRepository : IProductoRepository
 
     public void ModificarProducto(Producto producto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"UPDATE Productos SET Descripcion = @Descripcion, Precio = @Precio WHERE idProducto = @idProducto";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -44,14 +48,11 @@ class ProductoRepository : IProductoRepository
 
     public List<Producto> ListarProductos()
     {
-
         List<Producto> productos = new List<Producto>();
-
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
 
         string query = $"SELECT * FROM Productos";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
 
@@ -77,11 +78,9 @@ class ProductoRepository : IProductoRepository
 
         Producto producto;
 
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"SELECT * FROM Productos WHERE idProducto = @idProducto";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
 
@@ -110,11 +109,9 @@ class ProductoRepository : IProductoRepository
 
     public void EliminarProductoPorId(int idProducto)
     {
-        string connectionString = @"Data Source = db/Tienda.db;Cache=Shared";
-
         string query = $"DELETE FROM productos WHERE idProducto = @idProducto";
 
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
