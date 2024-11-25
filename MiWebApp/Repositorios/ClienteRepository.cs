@@ -2,18 +2,18 @@ using Microsoft.Data.Sqlite;
 class ClienteRepository : IClienteRepository
 {
 
-    private readonly string _ConnectionString;
+    private readonly string connectionString;
 
     public ClienteRepository(string CadenaDeConexion)
     {
-        _ConnectionString = CadenaDeConexion;
+        connectionString = CadenaDeConexion;
     }
 
     public void CrearCliente(Cliente cliente)
     {
         string query = $"INSERT INTO Clientes (Nombre, Email, Telefono) VALUES (@nombre, @email, @tel)";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -31,7 +31,7 @@ class ClienteRepository : IClienteRepository
 
         string query = $"UPDATE Clientes SET Nombre = @nombre, Email = @mail, Telefono = @tel WHERE IdCliente = @idCliente";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -56,7 +56,7 @@ class ClienteRepository : IClienteRepository
 
         string query = $"SELECT * FROM Clientes";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
 
@@ -86,7 +86,7 @@ class ClienteRepository : IClienteRepository
 
         string query = $"SELECT * FROM Clientes WHERE IdCliente = @idCliente";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
 
@@ -116,7 +116,7 @@ class ClienteRepository : IClienteRepository
     {
         string query = $"DELETE FROM Clientes WHERE IdCliente = @IdCliente";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);

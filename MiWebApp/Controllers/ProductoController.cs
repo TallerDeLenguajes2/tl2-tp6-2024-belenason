@@ -4,12 +4,12 @@ public class ProductoController : Controller
 {
     private readonly ILogger<ProductoController> _logger;
 
-    private ProductoRepository repoProductos;
+    private IProductoRepository repoProductos;
 
-    public ProductoController(ILogger<ProductoController> logger)
+    public ProductoController(ILogger<ProductoController> logger, IProductoRepository productosRepository)
     {
         _logger = logger;
-        repoProductos = new ProductoRepository();
+        repoProductos = productosRepository;
     }
 
     public IActionResult Index()

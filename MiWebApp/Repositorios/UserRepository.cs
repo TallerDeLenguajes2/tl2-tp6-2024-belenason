@@ -4,11 +4,11 @@ using Microsoft.Data.Sqlite;
 
 public class UserRepository : IUserRepository
 {
-    private readonly string _ConnectionString;
+    private readonly string connectionString;
 
     public UserRepository(string CadenaDeConexion)
     {
-        _ConnectionString = CadenaDeConexion;
+        connectionString = CadenaDeConexion;
     }
 
     public User GetUser(string usuario, string contra)
@@ -17,7 +17,7 @@ public class UserRepository : IUserRepository
 
         string query = @"SELECT * FROM Usuarios WHERE Usuario = @usuario AND Contrasena = @contra ";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query,connection);
@@ -38,10 +38,6 @@ public class UserRepository : IUserRepository
             }
             connection.Close();            
         }
-        if (user == null)
-        {
-            throw new Exception("Usuario inexistente.");
-        }
         return user;
     }
 
@@ -49,7 +45,7 @@ public class UserRepository : IUserRepository
     {
         string query = @"INSERT INTO Usuarios (Nombre, Usuario, Contrasena, IdRol) VALUES (@nombre, @usu, @contra, @rol)";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query,connection);

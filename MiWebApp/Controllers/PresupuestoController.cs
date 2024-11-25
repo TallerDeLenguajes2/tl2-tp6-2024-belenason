@@ -5,12 +5,17 @@ public class PresupuestoController : Controller
 {
     private readonly ILogger<PresupuestoController> _logger;
 
-    private PresupuestoRepository repoPresupuestos;
+    private IPresupuestoRepository repoPresupuestos;
 
-    public PresupuestoController(ILogger<PresupuestoController> logger)
+    private IProductoRepository repoProductos;
+
+    private IClienteRepository repoClientes;
+    public PresupuestoController(ILogger<PresupuestoController> logger, IPresupuestoRepository repoPresupuestos, IProductoRepository repoProductos, IClienteRepository repoClientes)
     {
         _logger = logger;
-        repoPresupuestos = new PresupuestoRepository();
+        this.repoPresupuestos = repoPresupuestos;
+        this.repoProductos = repoProductos;
+        this.repoClientes = repoClientes;
     }
 
     public IActionResult Index()
@@ -41,7 +46,6 @@ public class PresupuestoController : Controller
                 TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
                 return RedirectToAction("Index");
             }
-            ClienteRepository repoClientes = new ClienteRepository();
             List<Cliente> Clientes = repoClientes.ListarClientes();
             ViewData["Clientes"] =  Clientes.Select(c=> new SelectListItem
             {
@@ -97,7 +101,6 @@ public class PresupuestoController : Controller
                 TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
                 return RedirectToAction("Index");
             }
-            ClienteRepository repoClientes = new ClienteRepository();
             List<Cliente> Clientes = repoClientes.ListarClientes();
             ViewData["Clientes"] =  Clientes.Select(c=> new SelectListItem
             {
@@ -200,7 +203,6 @@ public class PresupuestoController : Controller
                 TempData["ErrorMessage"] = "No tienes permisos para realizar esta acción.";
                 return RedirectToAction("Index");
             }
-            ProductoRepository repoProductos = new ProductoRepository();
             List<Producto> productos = repoProductos.ListarProductos();
             ViewData["Productos"] = productos.Select(p => new SelectListItem
             {

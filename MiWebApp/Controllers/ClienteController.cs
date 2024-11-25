@@ -4,12 +4,12 @@ public class ClienteController : Controller
 {
     private readonly ILogger<ClienteController> _logger;
 
-    private ClienteRepository repoClientes;
+    private IClienteRepository repoClientes;
 
-    public ClienteController(ILogger<ClienteController> logger)
+    public ClienteController(ILogger<ClienteController> logger, IClienteRepository clientesRepository )
     {
         _logger = logger;
-        repoClientes = new ClienteRepository();
+        repoClientes = clientesRepository;
     }
 
     public IActionResult Index()

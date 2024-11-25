@@ -47,7 +47,7 @@ public class LoginController : Controller
                 _logger.LogInformation("El usuario: "+ usuario.Usuario+" ingresó correctamente");
                 return RedirectToAction("Index", "Home");
             }
-            _logger.LogWarning("Intento de acceso invalido - Usuario: "+ usuario.Usuario + "Clave ingresada: "+ usuario.Contrasena);
+            _logger.LogWarning("Intento de acceso invalido - Usuario: "+ model.Username + "Clave ingresada: "+ model.Password);
             model.ErrorMessage = "Credenciales inválidas.";
             model.IsAuthenticated = false;
 

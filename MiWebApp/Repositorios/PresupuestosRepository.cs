@@ -2,17 +2,17 @@ using Microsoft.Data.Sqlite;
 class PresupuestoRepository : IPresupuestoRepository
 {
 
-    private readonly string _ConnectionString;
+    private readonly string connectionString;
 
     public PresupuestoRepository(string CadenaDeConexion)
     {
-        _ConnectionString = CadenaDeConexion;
+        connectionString = CadenaDeConexion;
     }
     public void CrearPresupuesto(Presupuesto presupuesto)
     {
         string query = $"INSERT INTO Presupuestos (FechaCreacion, ClienteId) VALUES (@FechaCreacion, @ClienteId)";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -42,7 +42,7 @@ class PresupuestoRepository : IPresupuestoRepository
 
         Cliente cliente = null; //Está bien que sea nulo si no hay ningún cliente?
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -153,7 +153,7 @@ class PresupuestoRepository : IPresupuestoRepository
 
         Cliente cliente = null; //Está bien que sea nulo si no hay ningún cliente?
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -191,7 +191,7 @@ class PresupuestoRepository : IPresupuestoRepository
     {
         string query = $"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresup, @idProd, @Cantidad) ON CONFLICT(idPresupuesto, idProducto) DO UPDATE SET Cantidad = Cantidad + @Cantidad;";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -209,7 +209,7 @@ class PresupuestoRepository : IPresupuestoRepository
     {
         string query = @"UPDATE Presupuestos SET FechaCreacion = @fecha, ClienteId = @ClienteId WHERE idPresupuesto = @Id";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query,connection);
@@ -228,7 +228,7 @@ class PresupuestoRepository : IPresupuestoRepository
         string query = $"DELETE FROM presupuestos WHERE idPresupuesto = @idPresupuesto";
         string query2 = @"DELETE FROM PresupuestosDetalle WHERE idPresupuesto = @idPresupuesto;";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
 
@@ -250,7 +250,7 @@ class PresupuestoRepository : IPresupuestoRepository
     {
         string query = @"DELETE FROM PresupuestosDetalle WHERE idPresupuesto = @idP AND idProducto = @idPR";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
@@ -273,7 +273,7 @@ class PresupuestoRepository : IPresupuestoRepository
                         INNER JOIN PresupuestosDetalle pd ON p.IdProducto = pd.IdProducto
                         WHERE pd.IdPresupuesto = @IdPresupuesto";
 
-        using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
